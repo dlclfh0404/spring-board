@@ -2,6 +2,8 @@
 
 css는 따로 입히지 않고 기능에 중점을 두어서 만들었습니다.
 
+#### dev tools : java, springboot, intellij, mariadb, thymeleaf, jpa
+
 #### 기능
 1. 게시글 작성 : /board/write
 2. 작성 처리 : /board/writepro
