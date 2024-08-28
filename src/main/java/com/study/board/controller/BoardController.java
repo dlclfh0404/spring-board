@@ -21,8 +21,12 @@ import java.io.IOException;
 @Controller
 public class BoardController {
 
-    @Autowired
-    private BoardService boardService;
+
+    // 필드 변수에 @Autowired 어노테이션으로 자동 주입을 하지 마십시오
+//    @Autowired
+//    private BoardService boardService;
+
+    private final BoardService boardService;
 
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
@@ -49,13 +53,8 @@ public class BoardController {
                             @PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                             String searchKeyword) {
 
-        Page<Board> list = null;
+        Page<Board> list = searchKeyword == null ? boardService.boardList(pageable) : boardService.boardSearchList(searchKeyword, pageable);
 
-        if(searchKeyword == null) {
-            list = boardService.boardList(pageable);
-        } else {
-            list = boardService.boardSearchList(searchKeyword, pageable);
-        }
 
         int nowPage = list.getPageable().getPageNumber() + 1;
         int startPage = Math.max(nowPage - 4, 1);
@@ -90,9 +89,10 @@ public class BoardController {
     }
 
     @PostMapping("/board/update/{id}")
-    public String boardUpdate(@PathVariable("id") Integer id, Board board, MultipartFile file) throws Exception{
+    public String boardUpdate(@PathVariable("id") Integer id, Board board, MultipartFile file) throws Exception {
 
         Board boardTemp = boardService.boardView(id);
+
         // 기존 내용 가지고 오기
         boardTemp.setTitle(board.getTitle());
         boardTemp.setContent(board.getContent());
